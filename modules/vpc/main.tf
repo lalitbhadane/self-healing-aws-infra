@@ -31,6 +31,25 @@ resource "aws_subnet" "private" {
   }
 }
 
+resource "aws_subnet" "database" {
+  count             = length(var.database_subnet_cidrs)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.database_subnet_cidrs[count.index]
+  availability_zone = var.azs[count.index]
+  tags = {
+    Name = "database-subnet-${count.index + 1}"
+  }
+}
+
+resource "aws_db_subnet_group" "main" {
+  name       = "self-healing-db-subnet-group"
+  subnet_ids = aws_subnet.database[*].id
+
+  tags = {
+    Name = "self-healing-db-subnet-group"
+  }
+}
+
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 

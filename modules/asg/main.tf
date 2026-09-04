@@ -13,6 +13,37 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+resource "aws_iam_role" "ec2_ssm" {
+  name = "self-healing-ec2-ssm-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "self-healing-ec2-ssm-role"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.ec2_ssm.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ec2_ssm" {
+  name = "self-healing-ec2-ssm-profile"
+  role = aws_iam_role.ec2_ssm.name
+}
+
 resource "aws_security_group" "instance" {
   name        = "instance-security-group"
   description = "Allow HTTP only from ALB, all outbound"
@@ -42,6 +73,10 @@ resource "aws_launch_template" "app" {
   name_prefix   = "self-healing-app-"
   image_id      = coalesce(var.ami_id, data.aws_ami.amazon_linux.id)
   instance_type = "t3.micro"
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ec2_ssm.name
+  }
 
   vpc_security_group_ids = [aws_security_group.instance.id]
 

@@ -7,3 +7,13 @@ output "vpc_id" {
   description = "the VPC ID"
   value       = module.vpc.vpc_id
 }
+
+output "db_endpoint" {
+  description = "Connection endpoint for the RDS instance"
+  value       = module.rds.db_endpoint
+}
+
+output "db_instance_id" {
+  description = "ID of the RDS instance"
+  value       = module.rds.db_instance_id
+}
