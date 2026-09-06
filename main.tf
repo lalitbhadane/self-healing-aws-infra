@@ -36,3 +36,9 @@ module "rds" {
   ec2_security_group_id = module.asg.instance_security_group_id
   db_password           = var.db_password
 }
+
+module "monitoring" {
+  source      = "./modules/monitoring"
+  alert_email = var.alert_email
+  asg_name    = module.asg.asg_name
+}
