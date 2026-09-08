@@ -5,10 +5,11 @@ output "db_endpoint" {
 
 output "db_instance_id" {
   description = "ID of the RDS instance"
-  value       = aws_db_instance.main.id
+  value       = aws_db_instance.main.identifier
 }
 
 output "rds_security_group_id" {
   description = "Security group ID of the RDS instance"
   value       = aws_security_group.rds.id
 }
+

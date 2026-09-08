@@ -8,4 +8,7 @@ variable "asg_name" {
   type        = string
 }
 
-
+variable "db_instance_id" {
+  description = "RDS instance identifier to monitor"
+  type        = string
+}

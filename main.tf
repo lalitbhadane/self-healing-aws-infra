@@ -38,7 +38,8 @@ module "rds" {
 }
 
 module "monitoring" {
-  source      = "./modules/monitoring"
-  alert_email = var.alert_email
-  asg_name    = module.asg.asg_name
+  source         = "./modules/monitoring"
+  alert_email    = var.alert_email
+  asg_name       = module.asg.asg_name
+  db_instance_id = module.rds.db_instance_id
 }
