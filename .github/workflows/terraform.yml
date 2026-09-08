@@ -21,7 +21,16 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.16.i1
+          terraform_version: 1.16.1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::640168453702:role/GitHubActionsTerraformRole
+          aws-region: ap-south-1
+
+      - name: Verify AWS authentication
+        run: aws sts get-caller-identity 
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
