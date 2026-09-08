@@ -9,6 +9,10 @@ on:
 
 jobs:
   terraform:
+    permissions:
+      id-token: write
+      contents: read
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -17,7 +21,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.16.1
+          terraform_version: 1.16.i1
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
