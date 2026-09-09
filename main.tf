@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket	 = "self-healing-aws-infra-terraform-state-65b98806"
+    bucket       = "self-healing-aws-infra-terraform-state-65b98806"
     key          = "self-healing-aws-infra/terraform.tfstate"
     region       = "ap-south-1"
     use_lockfile = true
